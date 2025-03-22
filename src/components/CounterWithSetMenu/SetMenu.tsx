@@ -1,5 +1,5 @@
 import {Button} from "../Button.tsx";
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {Input} from "../Input.tsx";
 
 type SetMenuProps = {
@@ -9,6 +9,15 @@ type SetMenuProps = {
 export const SetMenu = ({setOptions}: SetMenuProps) => {
     const [maxValue, setMaxValue] = useState<number>(5);
     const [startValue, setStartValue] = useState<number>(0);
+
+    useEffect(() => {
+        const maxValueFromLocalStorage = localStorage.getItem('settingMaxCount');
+        const startValueFromLocalStorage = localStorage.getItem('settingStartCount');
+        if (maxValueFromLocalStorage && startValueFromLocalStorage) {
+            setMaxValue(JSON.parse(maxValueFromLocalStorage))
+            setStartValue(JSON.parse(startValueFromLocalStorage))
+        }
+    }, []);
 
     const getMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
         const TempValue = Number(e.target.value);
@@ -32,6 +41,8 @@ export const SetMenu = ({setOptions}: SetMenuProps) => {
         }
     }
     const setOptionsForCounter = () => {
+        localStorage.setItem('settingMaxCount', JSON.stringify(maxValue))
+        localStorage.setItem('settingStartCount', JSON.stringify(startValue))
         setOptions(maxValue, startValue)
     }
 

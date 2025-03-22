@@ -1,4 +1,4 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Scoreboard} from "../Scoreboard.tsx";
 import {Button} from "../Button.tsx";
 import {SetMenu} from "./SetMenu.tsx";
@@ -9,6 +9,19 @@ export const CounterWithSetMenu = () => {
 
     const maxValue = useRef<number>(5)
     const startValue = useRef<number>(0)
+
+    useEffect(() => {
+        const maxValueFromLocalStorage = localStorage.getItem('settingMaxCount');
+        const lastValueCountFromLocalStorage = localStorage.getItem('lastValueCount');
+        if (maxValueFromLocalStorage && lastValueCountFromLocalStorage) {
+            maxValue.current = JSON.parse(maxValueFromLocalStorage)
+            setCount(JSON.parse(lastValueCountFromLocalStorage))
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('lastValueCount', JSON.stringify(count))
+    }, [count]);
 
     const increment = () => {
         if (count < maxValue.current) {
@@ -25,7 +38,7 @@ export const CounterWithSetMenu = () => {
         maxValue.current = newMaxValue
         startValue.current = newStartValue
         setCount(newStartValue)
-        setStatusSetMenu(!StatusSetMenu)
+        openSetMenu()
     }
 
 
