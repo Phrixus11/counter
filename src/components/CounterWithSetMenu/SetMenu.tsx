@@ -21,7 +21,7 @@ export const SetMenu = ({setOptions}: SetMenuProps) => {
 
     const getMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
         const TempValue = Number(e.target.value);
-        if (TempValue <= 0) {
+        if (TempValue < 0) {
             setMaxValue(0)
         } else if (TempValue < startValue) {
             setMaxValue(startValue)
@@ -53,6 +53,7 @@ export const SetMenu = ({setOptions}: SetMenuProps) => {
         color: "red",
         outline: "none"
     }
+
 
     return (
         <div className={"setContainer"}>

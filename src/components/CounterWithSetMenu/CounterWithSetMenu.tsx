@@ -4,20 +4,16 @@ import {Button} from "../Button.tsx";
 import {SetMenu} from "./SetMenu.tsx";
 
 export const CounterWithSetMenu = () => {
-    const [count, setCount] = useState<number>(0)
+    const START_VALUE = 0
+    const lastValueCountFromLocalStorage = localStorage.getItem('lastValueCount');
+    const maxValueFromLocalStorage = localStorage.getItem('settingMaxCount')
+
+    const [count, setCount] = useState<number>(lastValueCountFromLocalStorage ? JSON.parse(lastValueCountFromLocalStorage) : 0)
     const [StatusSetMenu, setStatusSetMenu] = useState<boolean>(false)
 
-    const maxValue = useRef<number>(5)
-    const startValue = useRef<number>(0)
 
-    useEffect(() => {
-        const maxValueFromLocalStorage = localStorage.getItem('settingMaxCount');
-        const lastValueCountFromLocalStorage = localStorage.getItem('lastValueCount');
-        if (maxValueFromLocalStorage && lastValueCountFromLocalStorage) {
-            maxValue.current = JSON.parse(maxValueFromLocalStorage)
-            setCount(JSON.parse(lastValueCountFromLocalStorage))
-        }
-    }, []);
+    const maxValue = useRef<number>(maxValueFromLocalStorage ? JSON.parse(maxValueFromLocalStorage) : 5)
+    
 
     useEffect(() => {
         localStorage.setItem('lastValueCount', JSON.stringify(count))
@@ -29,18 +25,16 @@ export const CounterWithSetMenu = () => {
         }
     }
     const reset = () => {
-        setCount(startValue.current)
+        setCount(START_VALUE)
     }
     const openSetMenu = () => {
         setStatusSetMenu(!StatusSetMenu)
     }
     const setOptions = (newMaxValue: number, newStartValue: number) => {
         maxValue.current = newMaxValue
-        startValue.current = newStartValue
         setCount(newStartValue)
         openSetMenu()
     }
-
 
     return (
         <div>
@@ -49,7 +43,7 @@ export const CounterWithSetMenu = () => {
                 <Scoreboard maxValue={maxValue.current} currentValue={count}/>
                 <div className={"buttonContainer"}>
                     <Button onClickHandler={increment} title={'inc'} isDisabled={count >= maxValue.current}/>
-                    <Button onClickHandler={reset} title={'reset'} isDisabled={count === startValue.current}/>
+                    <Button onClickHandler={reset} title={'reset'} isDisabled={count === START_VALUE}/>
                     <Button onClickHandler={openSetMenu} title={'Set Menu'}/>
                 </div>
                 {StatusSetMenu && <SetMenu setOptions={setOptions} setStatusSetMenu={setStatusSetMenu}/>}
