@@ -38,7 +38,7 @@ export const CounterWithSetMenu = () => {
 
     return (
         <div>
-            <h2>Counter with set value</h2>
+            <h2 className={'mainTitle'}>Counter on useState with Set Menu and LocalStorage</h2>
             <div className={"counterContainer"}>
                 <Scoreboard maxValue={maxValue.current} currentValue={count}/>
                 <div className={"buttonContainer"}>

@@ -1,15 +1,25 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import {counterReducer} from "../model/counter-reducer.ts";
+import {loadState, saveState} from "../model/localStorage.ts";
 
 // объединение reducer'ов с помощью combineReducers
 const rootReducer = combineReducers({
     counter: counterReducer
 })
 
+const persistedState = loadState();
+
 // создание store
 export const store = configureStore({
     reducer: rootReducer,
+    preloadedState: persistedState,
 })
+
+store.subscribe(() => {
+    saveState({
+        counter: store.getState().counter
+    });
+});
 
 // автоматическое определение типа всего объекта состояния
 export type RootState = ReturnType<typeof store.getState>

@@ -1,55 +1,46 @@
-import {useRef, useState} from "react";
+import {useState} from "react";
 import {Scoreboard} from "../Scoreboard.tsx";
 import {Button} from "../Button.tsx";
 import {SetMenuWithReduxToolkit} from "./SetMenuWithReduxToolkit.tsx";
-import {AppDispatch, RootState} from "../../app/store.ts";
-import {useDispatch, useSelector} from "react-redux";
-import {counterIncrement, counterReset, setOption} from "../../model/counter-reducer.ts";
+import {counterIncrementAC, counterResetAC, setMaxCounterAC, setStartValueAC} from "../../model/counter-reducer.ts";
+import {selectCounterValue, selectMaxCounterValue} from "../../model/counter-selectors.ts";
+import {useAppSelector} from "../../common/hooks/useAppSelector.ts";
+import {useAppDispatch} from "../../common/hooks/useAppDispatch.ts";
 
 export const CounterWithReduxToolkit = () => {
     const START_VALUE = 0
-    // const lastValueCountFromLocalStorage = localStorage.getItem('lastValueCount');
-    // const maxValueFromLocalStorage = localStorage.getItem('settingMaxCount')
 
-    const count = useSelector<RootState,number>(state=>state.counter.value)
-    // const [count, setCount] = useState<number>(lastValueCountFromLocalStorage ? JSON.parse(lastValueCountFromLocalStorage) : 0)
-    const dispatch = useDispatch<AppDispatch>();
+    const count = useAppSelector(selectCounterValue)
+    const maxValue = useAppSelector(selectMaxCounterValue)
+    const dispatch = useAppDispatch();
 
     const [StatusSetMenu, setStatusSetMenu] = useState<boolean>(false)
 
-
-    // const maxValue = useRef<number>(maxValueFromLocalStorage ? JSON.parse(maxValueFromLocalStorage) : 5)
-    const maxValue = useRef<number>(7)
-
-    // useEffect(() => {
-    //     localStorage.setItem('lastValueCount', JSON.stringify(count))
-    // }, [count]);
-
     const increment = () => {
-        dispatch(counterIncrement())
+        dispatch(counterIncrementAC())
         // if (count < maxValue.current) {
         //
         // }
     }
     const reset = () => {
-        dispatch(counterReset())
+        dispatch(counterResetAC())
     }
     const openSetMenu = () => {
         setStatusSetMenu(!StatusSetMenu)
     }
     const setOptions = (newMaxValue: number, newStartValue: number) => {
-        maxValue.current = newMaxValue
-        dispatch(setOption({value: newStartValue}))
+        dispatch(setMaxCounterAC({maxValue: newMaxValue}))
+        dispatch(setStartValueAC({value: newStartValue}))
         openSetMenu()
     }
 
     return (
         <div>
-            <h2>Counter with Redux Toolkit</h2>
+            <h2 className={'mainTitle'}>Counter on Redux Toolkit with Set Menu and LocalStorage</h2>
             <div className={"counterContainer"}>
-                <Scoreboard maxValue={maxValue.current} currentValue={count}/>
+                <Scoreboard maxValue={maxValue} currentValue={count}/>
                 <div className={"buttonContainer"}>
-                    <Button onClickHandler={increment} title={'inc'} isDisabled={count >= maxValue.current}/>
+                    <Button onClickHandler={increment} title={'inc'} isDisabled={count >= maxValue}/>
                     <Button onClickHandler={reset} title={'reset'} isDisabled={count === START_VALUE}/>
                     <Button onClickHandler={openSetMenu} title={'Set Menu'}/>
                 </div>

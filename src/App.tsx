@@ -4,12 +4,13 @@ import {CounterWithSetMenu} from "./components/CounterWithSetMenu/CounterWithSet
 import {CounterWithReduxToolkit} from "./components/CounterWithReduxToolkit/CounterWithReduxToolkit.tsx";
 import {Provider} from "react-redux";
 import {store} from "./app/store.ts";
+import {Counter} from "./components/Counter/Counter.tsx";
 
 
 function App() {
     return (
         <div className={"appContainer"}>
-            {/*<Counter/>*/}
+            <Counter/>
             <CounterWithSetMenu/>
             <Provider store={store}>
                 <CounterWithReduxToolkit/>

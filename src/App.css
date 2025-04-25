@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+.mainTitle {
+  max-width: 435px
+}
+
 .buttonContainer {
   margin-top: 10px;
   border: 1px solid #949494;

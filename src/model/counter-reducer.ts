@@ -1,25 +1,30 @@
 import {createAction, createReducer} from "@reduxjs/toolkit";
 
 
-export const counterIncrement = createAction('counter/incrementCounter')
-export const counterReset = createAction('counter/resetCounter')
-export const setOption = createAction<{value: number}>('counter/setOption')
+export const counterIncrementAC = createAction('counter/incrementCounter')
+export const counterResetAC = createAction('counter/resetCounter')
+export const setStartValueAC = createAction<{value: number}>('counter/setStartValue')
+export const setMaxCounterAC = createAction<{maxValue: number}>('counter/setMaxValue')
 
 
 const initialState = {
-    value: 0
+    value: 0,
+    maxValue: 5
 }
 
 export const counterReducer = createReducer(initialState, (builder) => {
     builder
-        .addCase(counterIncrement, (state) => {
+        .addCase(counterIncrementAC, (state) => {
             state.value++
         })
-        .addCase(counterReset, (state) => {
+        .addCase(counterResetAC, (state) => {
             state.value = 0
         })
-        .addCase(setOption, (state,action) => {
+        .addCase(setStartValueAC, (state,action) => {
             state.value = action.payload.value
+        })
+        .addCase(setMaxCounterAC, (state,action) => {
+            state.maxValue = action.payload.maxValue
         })
 
 })
